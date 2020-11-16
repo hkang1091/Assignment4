@@ -1,0 +1,11 @@
+  text {
+    font-family: sans-serif;
+  }
+
+  .bar {
+    fill: cornflowerblue;
+  }
+
+  .bar:hover {
+    fill: pink;
+  }
