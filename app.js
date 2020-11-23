@@ -14,9 +14,9 @@
     function init() {
       // initialize controller variables
       ctrl.examples = [
-        "data_the_avengers",
-        "data_plant_seasons",
-        "data_car_ratings"
+        "data_by_artist.csv",
+        "data_by_genres.csv",
+        "data_by_year.csv"
       ];
       ctrl.exampleSelected = ctrl.examples[0];
       ctrl.getData = getData;
