@@ -8,7 +8,7 @@
   function MainCtrl($http) {
     var ctrl = this;
     init();
-
+    
 
     // function init
     function init() {
@@ -67,7 +67,6 @@
       link: radarDraw
     };
   }
-
 
   // directive function onReadFile
   function onReadFile($parse) {

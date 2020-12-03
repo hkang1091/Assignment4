@@ -11,11 +11,21 @@
 </head>
 
 <body class="container" ng-controller="MainCtrl as radar">
-
+  <!-- scripts -->
+  <script src="http://code.angularjs.org/1.3.5/angular.js"></script> 
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="app.js"></script>
+  <script src="radar.js"></script>
+  <script src="radarDraw.js"></script>
+  <script>
+    // Hack to make this example display correctly in an iframe on bl.ocks.org
+    d3.select(self.frameElement).style("height", "1000px");
+  </script>
+  
   <!-- header -->
   <header class="page-header">
     <h1>D3 Radar Chart</h1> 
-    <p class="text-small">AngularJS application showcasing an interactive D3 radar chart (with facetting).</p>
+    <!-- <p class="text-small">AngularJS application showcasing an interactive D3 radar chart (with facetting).</p> -->
   </header>
 
 
@@ -25,10 +35,7 @@
 
     <!-- visualization -->
     <div class="visualization col-xs-7">
-      <p>Select example:
-        <select ng-options="example for example in radar.examples" ng-model="radar.exampleSelected" ng-change="radar.selectExample(radar.exampleSelected)"></select>
-      </p>
-      <div class="visualization">
+     <div class="visualization">
         <radar csv="radar.csv" config="radar.config"></radar>
       </div>
     </div>
@@ -42,7 +49,14 @@
         <input type="radio" name="stack" value="Genre" >Genre<br>
         <input type="radio" name="stack" value="Artist">Artist<br>
       </form>
-      <form>
+
+      <form id="forming">
+        <p>Select example:
+          <select ng-options="example for example in radar.examples" ng-model="radar.exampleSelected" ng-change="radar.selectExample(radar.exampleSelected)"></select>
+        </p>
+      </form>
+      
+      <!-- <form>
         <h3>Configuration Parameters</h3>
         <div class="form-group">
           <label>Width:</label>
@@ -61,20 +75,20 @@
         <div class="form-group">
           <label>Label Scale:</label>
           <input type="number" class="form-control-inline" step="0.1" ng-model="radar.config.labelScale" />
-        </div>
-        <div class="form-group">
+        </div> -->
+        <!-- <div class="form-group">
           <label class="checkbox"><input type="checkbox" ng-model="radar.config.facet" /><span class="text-primary">Facet Plot</span></label>
           <label class="checkbox"><input type="checkbox" ng-model="radar.config.showLevels" />Levels</label>
           <label class="checkbox"><input type="checkbox" ng-model="radar.config.showAxes" />Axes</label>
-        </div>
-        <p class="text-muted">(NOTE: Not all configuration options are shown, refer to <code>README.md</code> or <code>radarDraw.js</code> for more details)</p>
+        </div> -->
+        <!-- <p class="text-muted">(NOTE: Not all configuration options are shown, refer to <code>README.md</code> or <code>radarDraw.js</code> for more details)</p> -->
       </form>
     </div>
   </div>
   <hr />
 
 
-  <!-- description -->
+  <!-- description
   <div class="description">
     <p>A radar chart visualizes multivariate data in a 2D chart of three or more quantitative variables represented on axes. Use the configuration parameters above to adjust the plot to your tastes, and you can also choose to view the plots stacked vs facetted.</p>
     <p>For custom testing, load up a file conforming to the data schema (see Data section below) or you can test out the following sample files:</p>
@@ -85,12 +99,12 @@
     </ul>
     <input id="fileUpload" type="file" on-read-file="radar.getData($fileContent)" />
   </div>
-  <hr/>
+  <hr/> -->
 
 
 
   <!-- details -->
-  <div class="Details">
+  <!-- <div class="Details">
     <h2>Details</h2>
     <p>This is a variation of the <a href="http://bl.ocks.org/tpreusse/2bc99d74a461b8c0acb1">original</a> and <a href="http://bl.ocks.org/nbremer/6506614">improved</a> D3 radar chart. Main D3 drawing logic is located in the <code>radar.js</code> file.</p>
     <p>Major improvements include:</p>
@@ -107,14 +121,14 @@
       <li><code>description (int/string):</code> not a mandatory field, and additional columns after this are accepted as well.</li>
     </ul>
     <hr />
-  </div>
+  </div> -->
 
 
   <!-- data/file preview -->
-  <div class="preview">
+  <!-- <div class="preview">
     <h2>Data</h2>
     <pre>{{ radar.csv }}</pre>
-  </div>
+  </div> -->
 
 
   <!-- footer -->
@@ -124,16 +138,7 @@
   </footer>
 
 
-  <!-- scripts -->
-  <script src="http://code.angularjs.org/1.3.5/angular.js"></script>
-  <script src="https://d3js.org/d3.v3.min.js"></script>
-  <script src="app.js"></script>
-  <script src="radar.js"></script>
-  <script src="radarDraw.js"></script>
-  <script>
-    // Hack to make this example display correctly in an iframe on bl.ocks.org
-    d3.select(self.frameElement).style("height", "1000px");
-  </script>
+
 </body>
 
 </html>

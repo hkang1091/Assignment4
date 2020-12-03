@@ -9,7 +9,7 @@ html {
   overflow-y: scroll;
 }
 h1 {
-  color: steelblue;
+  color: rgb(180, 70, 70);
   font-weight: 800;
   font-size: 1.7em;
 }
