@@ -29,11 +29,11 @@ var RadarChart = {
     var config = {
       w: w,
       h: h,
-      facet: false,
+      // facet: false,
       levels: 5,
       levelScale: 0.85,
       labelScale: 1.0,
-      facetPaddingScale: 2.5,
+      // facetPaddingScale: 2.5,
       maxValue: 0,
       radians: 2 * Math.PI,
       polygonAreaOpacity: 0.3,
@@ -103,23 +103,23 @@ var RadarChart = {
       d3.select(id).selectAll("svg").remove();
       updateConfig();
       
-      if (config.facet) {
-        data.forEach(function(d, i) {
-          buildVis([d]); // build svg for each data group
+    //   if (config.facet) {
+    //     data.forEach(function(d, i) {
+    //       buildVis([d]); // build svg for each data group
 
-          // override colors
-          vis.svg.selectAll(".polygon-areas")
-            .attr("stroke", config.colors(i))
-            .attr("fill", config.colors(i));
-          vis.svg.selectAll(".polygon-vertices")
-            .attr("fill", config.colors(i));
-          vis.svg.selectAll(".legend-tiles")
-            .attr("fill", config.colors(i));
-        });
-      } else {
-        buildVis(data); // build svg
-      }
-    }
+    //       // override colors
+    //       vis.svg.selectAll(".polygon-areas")
+    //         .attr("stroke", config.colors(i))
+    //         .attr("fill", config.colors(i));
+    //       vis.svg.selectAll(".polygon-vertices")
+    //         .attr("fill", config.colors(i));
+    //       vis.svg.selectAll(".legend-tiles")
+    //         .attr("fill", config.colors(i));
+    //     });
+    //   } else {
+    //     buildVis(data); // build svg
+    //   }
+    // }
 
 
     // update configuration parameters
@@ -135,14 +135,14 @@ var RadarChart = {
 
 
       // if facet required:
-      if (config.facet) {
-        config.w /= data.length;
-        config.h /= data.length;
-        config.paddingX /= (data.length / config.facetPaddingScale);
-        config.paddingY /= (data.length / config.facetPaddingScale);
-        config.polygonPointSize *= Math.pow(0.9, data.length);
-      }
-    }
+    //   if (config.facet) {
+    //     config.w /= data.length;
+    //     config.h /= data.length;
+    //     config.paddingX /= (data.length / config.facetPaddingScale);
+    //     config.paddingY /= (data.length / config.facetPaddingScale);
+    //     config.polygonPointSize *= Math.pow(0.9, data.length);
+    //   }
+    // }
 
 
     //build visualization using the other build helper functions
