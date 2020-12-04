@@ -67,14 +67,14 @@ var RadarChart = {
       radius: null
     };
 
-    // feed user configuration options
-    if ("undefined" !== typeof options) {
-      for (var i in options) {
-        if ("undefined" !== typeof options[i]) {
-          config[i] = options[i];
-        }
-      }
-    }
+    // // feed user configuration options
+    // if ("undefined" !== typeof options) {
+    //   for (var i in options) {
+    //     if ("undefined" !== typeof options[i]) {
+    //       config[i] = options[i];
+    //     }
+    //   }
+    // }
 
     render(data); // render the visualization
 
@@ -123,15 +123,15 @@ var RadarChart = {
 
 
     // update configuration parameters
-    function updateConfig() {
-      // adjust config parameters
-      config.maxValue = Math.max(config.maxValue, d3.max(data, function(d) {
-        return d3.max(d.axes, function(o) { return o.value; });
-      }));
-      config.w *= config.levelScale;
-      config.h *= config.levelScale;
-      config.paddingX = config.w * config.levelScale;
-      config.paddingY = config.h * config.levelScale;
+    // function updateConfig() {
+    //   // adjust config parameters
+    //   config.maxValue = Math.max(config.maxValue, d3.max(data, function(d) {
+    //     return d3.max(d.axes, function(o) { return o.value; });
+    //   }));
+    //   config.w *= config.levelScale;
+    //   config.h *= config.levelScale;
+    //   config.paddingX = config.w * config.levelScale;
+    //   config.paddingY = config.h * config.levelScale;
 
 
       // if facet required:
