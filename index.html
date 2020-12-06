@@ -109,11 +109,18 @@
 </style>
 
 <body>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="https://d3js.org/d3.v3.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
   
   <!-- header -->
   <header class="page-header">
@@ -126,7 +133,9 @@
     <div class="visualization col-xs-7">
       <svg width="100%"; height="600px"></svg>
     </div>
- 
+
+
+
   <!-- configuration -->
     <div class="configuration col-xs-5">
       <form id="dat">
@@ -141,23 +150,17 @@
               $('#year').show();
               $('#genre').hide();
               $('#artist').hide();
-              d3.csv("Data/data_by_year.csv", function(yea) {
-              console.log(yea)
-              })
+              
          }else if($('input:radio[id=Genre]').is(':checked')) {
               $('#year').hide();
               $('#genre').show();
               $('#artist').hide();
-              d3.csv("Data/data_by_genres.csv", function(gen) {
-              console.log(gen)
-              })
+              
          }else if($('input:radio[id=Artist]').is(':checked')) {
               $('#year').hide();
               $('#genre').hide();
               $('#artist').show();
-              d3.csv("Data/data_by_artist.csv", function(art) {
-              console.log(art)
-              })
+              
           }else {
               $('#year').hide();
               $('#genre').hide();
@@ -165,8 +168,7 @@
            }
         }
       </script>
-      
-    
+
         <div id="year">
           <br>
           <form id="slideyear">
@@ -175,8 +177,15 @@
           </form>
           <br>
          </div>
-        
-         <script>
+          <script>
+            d3.csv("Data/data_by_year.csv", function(yea) {
+            })
+             d3.csv("Data/data_by_genres.csv", function(gen) {
+             })
+             d3.csv("Data/data_by_artist.csv", function(art) {
+            })
+          </script>
+          <script>
           var slider = document.getElementById("myRange");
           var output = document.getElementById("demo");
           output.innerHTML = slider.value;
@@ -185,25 +194,77 @@
             output.innerHTML = this.value;
           }
           </script>
-        <script>
-          slider.value
-        </script>
-          
+                 
         <div id="genre">
           <br>
           <form id="search1">
-            <input type="text" name="search1" value="Insert Genre">
+            <input id="genre_search_box" type="text" name="search1" value="Insert Genre">
+            <button onclick="find_genre_in_clust();">Submit</button>
           </form>
           <br>
         </div>
+        <script>
+          d3.csv("Data/data_by_genres.csv", function(gen) {
+            var global_gen = gen;
+            var all_gen = [];
+            for (var i=0; i<gen.length; i++){
+            all_gen.push(gen[i].genres); 
+          };
+
+          $( "#genre_search_box").autocomplete({
+            source: all_gen
+          });
+
+          $( "#genre_search_box").keyup(function (e) {
+            if (e.keyCode == 13) {
+              find_genre_in_clust();
+            }
+          });
+        });
+        function find_genre_in_clust(){
+          search_gen = $('#genre_search_box').val();
+
+          if (all_gen.indexOf(search_gen) != -1){
+
+          }
+        };
+         </script>
 
         <div id="artist">
           <br>
           <form id="search2">
-           <input type="text" name="search2" value="Insert Artist's Name">
+           <input id= "artist_search_box" type="text" name="search2" value="Insert Artist's Name">
+           <button onclick="find_artist_in_clust();">Submit</button>
           </form>
           <br>
         </div>
+        <script>
+          d3.csv("Data/data_by_artist.csv", function(art) {
+            var global_art = art;
+            var all_art = [];
+            for (var i=0; i<art.length; i++){
+            all_art.push(art[i].artists); 
+          };
+
+          $( "#artist_search_box").autocomplete({
+            source: all_art
+          });
+
+          $( "#artist_search_box").keyup(function (e) {
+            if (e.keyCode == 13) {
+              find_artist_in_clust();
+            }
+          });
+        });
+        function find_airtist_in_clust(){
+          search_art = $('#artist_search_box').val();
+
+          if (all_art.indexOf(search_art) != -1){
+
+          }
+        };
+         </script>
+
         <br>
         If you click the append checkbox, you can attach the graphs and compare those
         <br>
@@ -225,26 +286,29 @@
     let data = [];
     let features = ["danceability","energy","liveness","tempo"];
     //generate the data
-    for (var i = 0; i < 3; i++){
+    for (var i = 0; i < 4; i++){
         var point = {}
-        //each feature will be a random number from 1-9
-        features.forEach(f => point[f] = 1 + Math.random() * 8);
+        features.forEach(f => point[f] = Math.random());
         data.push(point);
     }
     console.log(data);
+  </script>  
+    
+    
+  <script> 
     var svg = d3.select("svg")
       .attr("width", 600)
       .attr("height", 600);
       var radialScale = d3.scale.linear()
-      .domain([0,10])
-      .range([0,250]);
-      var ticks = [2,4,6,8,10];
+      .range([0,250])
+      .domain([0,1]);
+      var ticks = [0.2,0.4,0.6,0.8,1];
       ticks.forEach(t =>
       svg.append("circle")
           .attr("cx", 300)
           .attr("cy", 300)
           .attr("fill", "none")
-          .attr("stroke", "gray")
+          .attr("stroke", "black")
           .attr("r", radialScale(t))
       );
     ticks.forEach(t =>
@@ -255,14 +319,14 @@
     );
     function angleToCoordinate(angle, value){
     var x = Math.cos(angle) * radialScale(value);
-    let y = Math.sin(angle) * radialScale(value);
+    var y = Math.sin(angle) * radialScale(value);
     return {"x": 300 + x, "y": 300 - y};
     }
     for (var i = 0; i < features.length; i++) {
-    let ft_name = features[i];
-    let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
-    let line_coordinate = angleToCoordinate(angle, 10);
-    let label_coordinate = angleToCoordinate(angle, 10.5);
+    var ft_name = features[i];
+    var angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
+    var line_coordinate = angleToCoordinate(angle, 1.5);
+    var label_coordinate = angleToCoordinate(angle, 1.1);
 
     //draw axis line
     svg.append("line")
@@ -279,26 +343,27 @@
     .text(ft_name);
     }
 
-    let line = d3.svg.line()
+    var line = d3.svg.line()
     .x(d => d.x)
     .y(d => d.y);
-    let colors = ["darkorange", "gray", "navy"];
+    let colors = ["darkorange", "gray", "navy","green"];
 
     function getPathCoordinates(data_point){
-    let coordinates = [];
+    var coordinates = [];
     for (var i = 0; i < features.length; i++){
-        let ft_name = features[i];
-        let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
+        var ft_name = features[i];
+        var angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
         coordinates.push(angleToCoordinate(angle, data_point[ft_name]));
     }
     return coordinates;
-    } 
+    }
+
 
     for (var i = 0; i < data.length; i ++){
-    let d = data[i];
-    let color = colors[i];
-    let coordinates = getPathCoordinates(d);
-
+    var d = data[i];
+    var color = colors[i];
+    var coordinates = getPathCoordinates(d);
+   
     //draw the path element
     svg.append("path")
     .datum(coordinates)
@@ -307,8 +372,24 @@
     .attr("stroke", color)
     .attr("fill", color)
     .attr("stroke-opacity", 1)
-    .attr("opacity", 0.5);
-    }
+    .attr("opacity", 0.5)
+    // .on("mouseover", function (d, i) {
+    //    d3.select(this).transition()
+    //    .duration('50')
+    //    .attr('opacity', '.85');
+    //     div.transition()
+    //       .duration('50')
+    //       .style("opacity",1);
+    // })
+    // .on('mouseout',function (d,i) {
+    //   d3.select(this).transition()
+    //   .duration('50')
+    //   .attr('opacity', '1');
+    //     div.transition()
+    //       .duration('50')
+    //       .style("opacity", 0);
+    // });
+  }
     </script>
 
   <footer>
