@@ -121,7 +121,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-  
+  <script src="app.js"></script>  
   <!-- header -->
   <header class="page-header">
     <h1>MUSIC FEATURES VISUALIZATION</h1> 
@@ -177,14 +177,7 @@
           </form>
           <br>
          </div>
-          <script>
-            d3.csv("Data/data_by_year.csv", function(yea) {
-            })
-             d3.csv("Data/data_by_genres.csv", function(gen) {
-             })
-             d3.csv("Data/data_by_artist.csv", function(art) {
-            })
-          </script>
+
           <script>
           var slider = document.getElementById("myRange");
           var output = document.getElementById("demo");
@@ -193,8 +186,48 @@
           slider.oninput = function() {
             output.innerHTML = this.value;
           }
-          </script>
-                 
+
+          // var global_year;
+          // d3.csv("Data/data_by_year.csv", function(yea){
+          //   global_year=yea;
+          //   print1()
+          // });
+
+          // function print1(){
+          // year_d = global_year.filter(function(global_year) { return global_year.year === slider.value})
+          // console.log(year_d)       
+          // } 
+
+          // var fs = require('fs');
+          // var csv = require('csvtojson');
+          // var { Parser } = require('json2csv');
+          // var year_data = [];
+
+          // (async () => {
+
+          //   const year_data = await csv().fromFile("Data/data_by_year.csv");
+          //   console.log(year_data)
+
+          //   const year_dat = new Parser({fields: ["year","danceability","energy","liveness","tempo"]}).parse(year_data);
+          //   fs.writeFilesyn("Data/data_by_year.csv",year_dat);
+          // })();
+          var year_data = [];
+          d3.csv("Data/data_by_year.csv", function(d) {
+          return {
+              year: d.year,
+              danceability: d.danceability,
+              energy: d.energy,
+              liveness: d.liveness,
+              tempo: d.tempo,
+              length: d.Length // convert "Length" column to number
+              };
+            }, function(error, rows) {
+              year_data = rows;
+            });
+        console.log(year_data)
+
+       </script>
+
         <div id="genre">
           <br>
           <form id="search1">
@@ -204,8 +237,9 @@
           <br>
         </div>
         <script>
+          var global_gen;
           d3.csv("Data/data_by_genres.csv", function(gen) {
-            var global_gen = gen;
+            global_gen = gen;
             var all_gen = [];
             for (var i=0; i<gen.length; i++){
             all_gen.push(gen[i].genres); 
@@ -223,7 +257,7 @@
         });
         function find_genre_in_clust(){
           search_gen = $('#genre_search_box').val();
-
+  
           if (all_gen.indexOf(search_gen) != -1){
 
           }
@@ -239,11 +273,12 @@
           <br>
         </div>
         <script>
+          var global_art;
           d3.csv("Data/data_by_artist.csv", function(art) {
-            var global_art = art;
+            global_art = art;
             var all_art = [];
             for (var i=0; i<art.length; i++){
-            all_art.push(art[i].artists); 
+            all_art.push(art[i].artists);           
           };
 
           $( "#artist_search_box").autocomplete({
@@ -263,30 +298,47 @@
 
           }
         };
+
+        
          </script>
 
         <br>
         If you click the append checkbox, you can attach the graphs and compare those
         <br>
         <div id="append">
-          <input type="checkbox" name="myCheckBox" unchecked>
-          <label for="myCheckBox">append 1</label> <br>
-          <input type="checkbox" name="myCheckBox2" unchecked>
+          <input type="checkbox" name="myCheckBox" id="myCheckBox" onclick="myfunction1()">
+          <label for="myCheckBox">append 1</label> <p id="text" style="display:none"></p> <br>
+          <input type="checkbox" name="myCheckBox2" id="myCheckBox2" onclick="myfunction2()"> 
           <label for="myCheckBox2">append 2</label> <br>
-          <input type="checkbox" name="myCheckBox" unchecked>
+          <input type="checkbox" name="myCheckBox3" id="myCheckBox3" onclick="myfunction3()">
           <label for="myCheckBox3">append 3</label> <br>
-          <input type="checkbox" name="myCheckBox2" unchecked>
+          <input type="checkbox" name="myCheckBox4" id="myCheckBox4" onclick="myfunction4()">
           <label for="myCheckBox4">append 4</label> <br>
         </div>
-      
-   </div>
+  
+        <script>
+          function checkcolname(dat){
+            return dat > 0.01;
+          }
+          function myfunction1() {
+            var checkBox = document.getElementById("myCheckBox");
+            var text = document.getElementById("text");
+            if (checkBox.checked == true) {
+              document.getElementById("text").innerHTML = data.find(checkcolname);
+            } else {
+            }
+          }
+        </script>
+        
+
   </div>
 
+  
   <script>
-    let data = [];
-    let features = ["danceability","energy","liveness","tempo"];
+    var data = [];
+    var features = ["year","danceability","energy","liveness","tempo"];
     //generate the data
-    for (var i = 0; i < 4; i++){
+    for (var i = 0; i < 1; i++){
         var point = {}
         features.forEach(f => point[f] = Math.random());
         data.push(point);
@@ -346,7 +398,7 @@
     var line = d3.svg.line()
     .x(d => d.x)
     .y(d => d.y);
-    let colors = ["darkorange", "gray", "navy","green"];
+    let colors = ["yellow", "green", "blue","red","pink"];
 
     function getPathCoordinates(data_point){
     var coordinates = [];
@@ -390,6 +442,19 @@
     //       .style("opacity", 0);
     // });
   }
+  // select the svg area
+   // Handmade legend
+    svg.append("circle").attr("cx",540).attr("cy",500).attr("r", 6).style("fill", "yellow")
+    svg.append("circle").attr("cx",540).attr("cy",520).attr("r", 6).style("fill", "green")
+    svg.append("circle").attr("cx",540).attr("cy",540).attr("r", 6).style("fill", "blue")
+    svg.append("circle").attr("cx",540).attr("cy",560).attr("r", 6).style("fill", "red")
+    svg.append("circle").attr("cx",540).attr("cy",580).attr("r", 6).style("fill", "pink")
+    svg.append("text").attr("x", 547).attr("y", 500).text("Current").style("font-size", "12px").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", 547).attr("y", 520).text("Append 1").style("font-size", "12px").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", 547).attr("y", 540).text("Append 2").style("font-size", "12px").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", 547).attr("y", 560).text("Append 3").style("font-size", "12px").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", 547).attr("y", 580).text("Append 4").style("font-size", "12px").attr("alignment-baseline","middle")
+
     </script>
 
   <footer>
