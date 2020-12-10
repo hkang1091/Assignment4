@@ -134,9 +134,36 @@
       <svg width="100%"; height="600px"></svg>
     </div>
 
+    <!-- configuration -->
+    <script>
+             $(document).ready(function() {
+              $.ajax({
+                    type: "GET",
+                    url: "Data/data_by_year.csv",
+                    dataType: "text",
+                    success: function(data) {processData1(data);}
+                 });
+             });
+             var year_data = [];
+              function processData1(allText) {
+                    var allTextLines = allText.split(/\r\n|\n/);
+                    var headers = allTextLines[0].split(',');
+                    for (var i=1; i<allTextLines.length; i++) {
+                        var data = allTextLines[i].split(',');
+                        if (data.length == headers.length) {
+                            var tarr = [];
+                            for (var j=0; j<headers.length; j++) {
+                                tarr.push(headers[j]+":"+data[j]);
+                            }
+                            year_data.push(tarr);
+                        }
+                    }
+                  }
+                  // console.log(year_data.filter(year_data.year=="1921"))
+                  const result = year_data.filter(year_data => year_data.year == '1924');
 
-
-  <!-- configuration -->
+                  console.log(result);
+    </script>
     <div class="configuration col-xs-5">
       <form id="dat">
         <h3>Choose The Area You Want To Investigate In</h3>
@@ -144,14 +171,19 @@
         <input type="radio" id= "Genre" name="option" value="Genre" onclick="div_OnOff()">Genre<br> </input>
         <input type="radio" id= "Artist" name="option" value="Artist" onclick="div_OnOff()">Artist<br> </input>
       </form>
+
+      <script>
+
+      </script>
+
       <script>
         function div_OnOff(){
          if($('input:radio[id=Year]').is(':checked')){
               $('#year').show();
               $('#genre').hide();
               $('#artist').hide();
-              
-         }else if($('input:radio[id=Genre]').is(':checked')) {
+                   
+          }else if($('input:radio[id=Genre]').is(':checked')) {
               $('#year').hide();
               $('#genre').show();
               $('#artist').hide();
@@ -186,47 +218,8 @@
           slider.oninput = function() {
             output.innerHTML = this.value;
           }
-
-          // var global_year;
-          // d3.csv("Data/data_by_year.csv", function(yea){
-          //   global_year=yea;
-          //   print1()
-          // });
-
-          // function print1(){
-          // year_d = global_year.filter(function(global_year) { return global_year.year === slider.value})
-          // console.log(year_d)       
-          // } 
-
-          // var fs = require('fs');
-          // var csv = require('csvtojson');
-          // var { Parser } = require('json2csv');
-          // var year_data = [];
-
-          // (async () => {
-
-          //   const year_data = await csv().fromFile("Data/data_by_year.csv");
-          //   console.log(year_data)
-
-          //   const year_dat = new Parser({fields: ["year","danceability","energy","liveness","tempo"]}).parse(year_data);
-          //   fs.writeFilesyn("Data/data_by_year.csv",year_dat);
-          // })();
-          var year_data = [];
-          d3.csv("Data/data_by_year.csv", function(d) {
-          return {
-              year: d.year,
-              danceability: d.danceability,
-              energy: d.energy,
-              liveness: d.liveness,
-              tempo: d.tempo,
-              length: d.Length // convert "Length" column to number
-              };
-            }, function(error, rows) {
-              year_data = rows;
-            });
-        console.log(year_data)
-
-       </script>
+     
+           </script>
 
         <div id="genre">
           <br>
@@ -337,13 +330,18 @@
   <script>
     var data = [];
     var features = ["year","danceability","energy","liveness","tempo"];
-    //generate the data
-    for (var i = 0; i < 1; i++){
+    for (var i = 0; i < 3; i++){
         var point = {}
         features.forEach(f => point[f] = Math.random());
         data.push(point);
     }
-    console.log(data);
+    var data2 = [];
+    for (var i = 0; i < 1; i++){
+        var point = {}
+        features.forEach(f => point[f] = Math.random());
+        data2.push(point);
+    }
+    
   </script>  
     
     
@@ -398,8 +396,7 @@
     var line = d3.svg.line()
     .x(d => d.x)
     .y(d => d.y);
-    let colors = ["yellow", "green", "blue","red","pink"];
-
+   
     function getPathCoordinates(data_point){
     var coordinates = [];
     for (var i = 0; i < features.length; i++){
@@ -410,13 +407,27 @@
     return coordinates;
     }
 
+    for (var i = 0; i < data2.length; i ++){
+    var d2 = data2[i];
+    var coordinates2 = getPathCoordinates(d2);
+   
+    svg.append("path")
+    .datum(coordinates2)
+    .attr("d",line)
+    .attr("stroke-width", 3)
+    .attr("stroke", "yellow")
+    .attr("fill", "yellow")
+    .attr("stroke-opacity", 1)
+    .attr("opacity", 0.5)
+  }
 
+
+    var colors = ["green", "blue","red","pink"];
     for (var i = 0; i < data.length; i ++){
     var d = data[i];
     var color = colors[i];
     var coordinates = getPathCoordinates(d);
    
-    //draw the path element
     svg.append("path")
     .datum(coordinates)
     .attr("d",line)
@@ -442,8 +453,6 @@
     //       .style("opacity", 0);
     // });
   }
-  // select the svg area
-   // Handmade legend
     svg.append("circle").attr("cx",540).attr("cy",500).attr("r", 6).style("fill", "yellow")
     svg.append("circle").attr("cx",540).attr("cy",520).attr("r", 6).style("fill", "green")
     svg.append("circle").attr("cx",540).attr("cy",540).attr("r", 6).style("fill", "blue")
