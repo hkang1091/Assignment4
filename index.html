@@ -404,8 +404,6 @@
 
     </div>
 
-
-
     <script>
       var svg = d3.select("svg")
         .attr("width", 600)
@@ -468,10 +466,12 @@
         return coordinates;
       }
 
+
+
       for (var i = 0; i < data.length; i++) {
         var d = data[i];
         var coordinates = getPathCoordinates(d);
-
+        console.log(coordinates)
         svg.append("path")
           .datum(coordinates)
           .attr("d", line)
@@ -480,22 +480,29 @@
           .attr("fill", "yellow")
           .attr("stroke-opacity", 1)
           .attr("opacity", 0.5)
-        // .on("mouseover", function (d, i) {
-        //    d3.select(this).transition()
-        //    .duration('50')
-        //    .attr('opacity', '.85');
-        //     div.transition()
-        //       .duration('50')
-        //       .style("opacity",1);
-        // })
-        // .on('mouseout',function (d,i) {
-        //   d3.select(this).transition()
-        //   .duration('50')
-        //   .attr('opacity', '1');
-        //     div.transition()
-        //       .duration('50')
-        //       .style("opacity", 0);
-        // });
+        .on("mouseover", function (d,i) {
+           d3.select(this).transition()
+           .duration('10')
+           .attr('opacity', '1');
+
+        })
+        .on('mouseout',function (d,i) {
+          d3.select(this).transition()
+          .duration('10')
+          .attr('opacity', '.5');
+
+        });
+        // svg.selectAll(".radarCircle")
+        // .data(function(d,i) {return d;})
+        // .enter().append("circle")
+        // .attr("class", "radarCircle")
+        // .attr("r", svg.dotRadius)
+        // .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+        // .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+        // .style("fill", function(d,i,j) { return cfg.color(j); })
+        // .style("fill-opacity", 0.8);
+
+
       }
 
 
@@ -516,17 +523,13 @@
         u.enter().append("path")
           .attr('class', 'd1')
           .attr("d", line)
-          //.transition()
-          //.duration(1000)
           .attr("stroke-width", 3)
           .attr("stroke", "green")
           .attr("fill", "green")
-          .attr("stroke-opacity", 1)
+          .attr("stroke-opacity", 11)
           .attr("opacity", 0.5)
-
+         
         u.exit()
-          //.transition()
-          //.duration(1000)
           .remove()
       }
 
@@ -546,8 +549,6 @@
       u.enter().append("path")
         .attr('class', 'd2')
         .attr("d", line)
-        //.transition()
-        //.duration(1000)
         .attr("stroke-width", 3)
         .attr("stroke", "blue")
         .attr("fill", "blue")
@@ -555,8 +556,6 @@
         .attr("opacity", 0.5)
 
       u.exit()
-        //.transition()
-        //.duration(1000)
         .remove()
       }
 
@@ -576,8 +575,6 @@
       u.enter().append("path")
         .attr('class', 'd3')
         .attr("d", line)
-        //.transition()
-        //.duration(1000)
         .attr("stroke-width", 3)
         .attr("stroke", "red")
         .attr("fill", "red")
@@ -585,8 +582,6 @@
         .attr("opacity", 0.5)
 
       u.exit()
-        //.transition()
-        //.duration(1000)
         .remove()
       }
 
@@ -606,8 +601,6 @@
       u.enter().append("path")
         .attr('class', 'd4')
         .attr("d", line)
-        //.transition()
-        //.duration(1000)
         .attr("stroke-width", 3)
         .attr("stroke", "pink")
         .attr("fill", "pink")
@@ -615,8 +608,6 @@
         .attr("opacity", 0.5)
 
       u.exit()
-        //.transition()
-        //.duration(1000)
         .remove()
       }
 
