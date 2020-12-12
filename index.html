@@ -132,6 +132,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
  
   <!-- header -->
   <header class="page-header">
@@ -146,47 +147,7 @@
     </div>
 
     <!-- configuration -->
-    <script>
-      $(document).ready(function () {
-        $.ajax({
-          type: "GET",
-          url: "Data/data_by_year.csv",
-          dataType: "text",
-          success: function (data) { processData1(data); }
-        });
-      });
-      var year_data = [];
-      function processData1(allText) {
-        var allTextLines = allText.split(/\r\n|\n/);
-        var headers = allTextLines[0].split(',');
-        for (var i = 1; i < allTextLines.length; i++) {
-          var data = allTextLines[i].split(',');
-          var tarr = [];
-          for (var j = 0; j < headers.length; j++) {
-            let obj = {}
-            console.log(data[1][1])
-            obj.year = data[1]
-            obj.danceability = data[2]
-            obj.energy = data[3]
-            obj.liveness = data[4]
-            obj.tempo = data[5]
-            tarr.push(obj)
-          }
-          year_data.push(tarr);
-        }
-
-        console.log(year_data)
-
-        year_data.forEach(function (element, i) {
-          year_data[i].year = parseInt(year_data[i][0].substring(year_data[i][0].indexOf(":") + 1))
-        })
-        const result = year_data.filter(year_data => year_data.year == '1924');
-
-        console.log(result);
-      }
-
-    </script>
-    <div class="configuration col-xs-5">
+     <div class="configuration col-xs-5">
       <form id="dat">
         <h3>Choose The Area You Want To Investigate In</h3>
         <input type="radio" id="Year" name="option" value="Year" onclick="div_OnOff()">Year<br> </input>
@@ -194,11 +155,7 @@
         <input type="radio" id="Artist" name="option" value="Artist" onclick="div_OnOff()">Artist<br> </input>
       </form>
 
-      <script>
-
-      </script>
-
-      <script>
+       <!-- <script>
         function div_OnOff() {
           if ($('input:radio[id=Year]').is(':checked')) {
             $('#year').show();
@@ -221,7 +178,7 @@
             $('#artist').hide();
           }
         }
-      </script>
+      </script> -->
 
       <div id="year">
         <br>
@@ -232,7 +189,7 @@
         <br>
       </div>
 
-      <script>
+      <!-- <script>
         var slider = document.getElementById("myRange");
         var output = document.getElementById("demo");
         output.innerHTML = slider.value;
@@ -241,7 +198,7 @@
           output.innerHTML = this.value;
         }
 
-      </script>
+      </script> -->
 
       <div id="genre">
         <br>
@@ -251,7 +208,7 @@
         </form>
         <br>
       </div>
-      <script>
+      <!-- <script>
         var global_gen;
         d3.csv("Data/data_by_genres.csv", function (gen) {
           var all_gen = [];
@@ -276,7 +233,7 @@
 
           }
         };
-      </script>
+      </script> -->
 
       <div id="artist">
         <br>
@@ -286,7 +243,7 @@
         </form>
         <br>
       </div>
-      <script>
+      <!-- <script>
         var global_art;
         d3.csv("Data/data_by_artist.csv", function (art) {
           var all_art = [];
@@ -313,7 +270,7 @@
         };
 
 
-      </script>
+      </script> -->
 
       <br>
       If you click the append checkbox, you can attach the graphs and compare those
@@ -330,7 +287,7 @@
         <label for="myCheckBox4">append 4</label> <br>
       </div>
 
-      <script>
+      <!-- <script>
         var features = ["danceability", "energy", "liveness", "tempo"];
         var data = [];
         for (var i = 0; i < 1; i++) {
@@ -399,12 +356,12 @@
           }
         }
 
-      </script>
+      </script> -->
 
 
     </div>
 
-    <script>
+    <!-- <script>
       var svg = d3.select("svg")
         .attr("width", 600)
         .attr("height", 600);
@@ -465,13 +422,15 @@
         }
         return coordinates;
       }
-
-
-
+      
+      
       for (var i = 0; i < data.length; i++) {
         var d = data[i];
         var coordinates = getPathCoordinates(d);
-        console.log(coordinates)
+        var da = d.danceability
+        var en = d.energy
+        var liv = d.liveness
+        var tem = d.tempo
         svg.append("path")
           .datum(coordinates)
           .attr("d", line)
@@ -480,31 +439,96 @@
           .attr("fill", "yellow")
           .attr("stroke-opacity", 1)
           .attr("opacity", 0.5)
-        .on("mouseover", function (d,i) {
+        .on("mouseover", function (d) {
            d3.select(this).transition()
            .duration('10')
            .attr('opacity', '1');
-
         })
-        .on('mouseout',function (d,i) {
+        .on('mouseout',function (d) {
           d3.select(this).transition()
           .duration('10')
           .attr('opacity', '.5');
-
         });
-        // svg.selectAll(".radarCircle")
-        // .data(function(d,i) {return d;})
-        // .enter().append("circle")
-        // .attr("class", "radarCircle")
-        // .attr("r", svg.dotRadius)
-        // .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
-        // .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
-        // .style("fill", function(d,i,j) { return cfg.color(j); })
-        // .style("fill-opacity", 0.8);
-
-
+        svg.append("circle")
+        .attr("cx", coordinates[0].x)
+        .attr("cy", coordinates[0].y)
+        .attr("r", 6)
+        .style("fill", "yellow")
+        .on("mouseover", function (d) {
+          newX = coordinates[0].x-10;
+          newY = coordinates[0].y-10;
+          tooltip
+          .attr('x',newX)
+          .attr('y',newY)
+          .text(da)
+          .transition().duration(200)
+				  .style('opacity', 1);
+        })
+        .on("mouseout", function(){
+          tooltip.transition().duration(200)
+            .style("opacity", 0);
+        });
+        svg.append("circle")
+        .attr("cx", coordinates[1].x)
+        .attr("cy", coordinates[1].y)
+        .attr("r", 6)
+        .style("fill", "yellow")
+        .on("mouseover", function (d) {
+          newX = coordinates[1].x-10;
+          newY = coordinates[1].y-10;
+          tooltip
+          .attr('x',newX)
+          .attr('y',newY)
+          .text(en)
+          .transition().duration(200)
+				  .style('opacity', 1);
+        })
+        .on("mouseout", function(){
+          tooltip.transition().duration(200)
+            .style("opacity", 0);
+        });
+        svg.append("circle")
+        .attr("cx", coordinates[2].x)
+        .attr("cy", coordinates[2].y)
+        .attr("r", 6)
+        .style("fill", "yellow")
+        .on("mouseover", function (d) {
+          newX = coordinates[2].x-10;
+          newY = coordinates[2].y-10;
+          tooltip
+          .attr('x',newX)
+          .attr('y',newY)
+          .text(liv)
+          .transition().duration(200)
+				  .style('opacity', 1);
+        })
+        .on("mouseout", function(){
+          tooltip.transition().duration(200)
+            .style("opacity", 0);
+        });
+        svg.append("circle")
+        .attr("cx", coordinates[3].x)
+        .attr("cy", coordinates[3].y)
+        .attr("r", 6)
+        .style("fill", "yellow")
+        .on("mouseover", function (d) {
+          newX = coordinates[3].x-10;
+          newY = coordinates[3].y-10;
+          tooltip
+          .attr('x',newX)
+          .attr('y',newY)
+          .text(tem)
+          .transition().duration(200)
+				  .style('opacity', 1);
+        })
+        .on("mouseout", function(){
+          tooltip.transition().duration(200)
+            .style("opacity", 0);
+        });
       }
-
+      var tooltip = svg.append("text")
+      .attr("class","tooltip")
+      .style("opacity",0);
 
 
       function render_dat1() {
@@ -517,7 +541,7 @@
         else {
           coordinates1 = []
         }
-
+   
         let u = svg.selectAll('.d1').data(coordinates1)
 
         u.enter().append("path")
@@ -528,6 +552,7 @@
           .attr("fill", "green")
           .attr("stroke-opacity", 11)
           .attr("opacity", 0.5)
+  
          
         u.exit()
           .remove()
@@ -624,13 +649,13 @@
       svg.append("text").attr("x", 547).attr("y", 560).text("Append 3").style("font-size", "12px").attr("alignment-baseline", "middle")
       svg.append("text").attr("x", 547).attr("y", 580).text("Append 4").style("font-size", "12px").attr("alignment-baseline", "middle")
 
-    </script>
+    </script> -->
 
     <footer>
       <p><a href="https://github.com/hkang1091/Assignment4" target="_blank"> MUSIC FEATURES VISUALIZATION </a> by Vizzard(Desmond Fung, Hangyu Kang, Param Gandhi, Sreeranjani Didugu)
       </p>
     </footer>
-
+    <script src="app.js"></script>
 
 
 </body>
