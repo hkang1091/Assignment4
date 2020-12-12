@@ -132,7 +132,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
- 
+  <script src="app.js"></script>
   <!-- header -->
   <header class="page-header">
     <h1>MUSIC FEATURES VISUALIZATION</h1>
@@ -160,29 +160,39 @@
         var allTextLines = allText.split(/\r\n|\n/);
         var headers = allTextLines[0].split(',');
         for (var i = 1; i < allTextLines.length; i++) {
-          var data = allTextLines[i].split(',');
+          var datas = allTextLines[i].split(',');
           var tarr = [];
           for (var j = 0; j < headers.length; j++) {
-            let obj = {}
-            console.log(data[1][1])
-            obj.year = data[1]
-            obj.danceability = data[2]
-            obj.energy = data[3]
-            obj.liveness = data[4]
-            obj.tempo = data[5]
-            tarr.push(obj)
+            //let obj = {}
+            //obj.year = data[j]
+            // ...
+            //tarr.push(object)
+            tarr.push(headers[j] + ":" + datas[j]);
           }
           year_data.push(tarr);
         }
 
-        console.log(year_data)
+        //console.log(year_data)
 
         year_data.forEach(function (element, i) {
           year_data[i].year = parseInt(year_data[i][0].substring(year_data[i][0].indexOf(":") + 1))
+          year_data[i].danceability  = parseFloat(year_data[i][1].substring(year_data[i][1].indexOf(":") + 1))
+          year_data[i].liveness  = parseFloat(year_data[i][2].substring(year_data[i][2].indexOf(":") + 1))
+          year_data[i].tempo  = parseFloat(year_data[i][3].substring(year_data[i][3].indexOf(":") + 1))
         })
-        const result = year_data.filter(year_data => year_data.year == '1924');
+        //const result = year_data.filter(year_data => year_data.year == '1924');
+        // var testing = [{
+        //   year: [],
+        //   danceability: "0000",
+        //   liveness: "0000",
+        //   tempo: "0000"}];
 
-        console.log(result);
+        // year_data.forEach(function (element, i) {
+        //   testing[i].year = year_data[i].year
+        //   //testing[i].danceability = year_data[i].danceability
+        // })
+        // console.log(testing)
+        // //console.log(result);
       }
 
     </script>
@@ -334,11 +344,37 @@
         var features = ["danceability", "energy", "liveness", "tempo"];
         var data = [];
         for (var i = 0; i < 1; i++) {
-          var point = {}
-          features.forEach(f => point[f] = Math.random());
+          var point = {
+            danceability : 0,
+            energy: 0, 
+            liveness: 0,
+            tempo: 0
+          };
+          point.danceability = year_data[0].danceability
+          point.energy = year_data[0].energy
+          point.liveness = year_data[0].liveness
+          point.tempo = year_data[0].tempo
+          //features.forEach(f => point[f] = Math.random());
           data.push(point);
         }
+        //console.log(data)
 
+
+
+
+
+        /*var dat1 = [];
+        for (var i = 0; i < 1; i++) {
+          var point = {}
+          features.forEach(f => point[f] = Math.random());
+          dat1.push(point);
+        }
+        console.log(dat1)*/
+
+        // function checkcolname(dat){
+        //   return dat > 0.01;
+        // }
+        // document.getElementById("text").innerHTML = data.find(checkcolname);
         var dat1 = [];
         function myfunction1() {
           var checkBox = document.getElementById("myCheckBox");
@@ -346,59 +382,19 @@
           if (checkBox.checked == true) {
             dat1.push(...data);
             render_dat1()
+            console.log(dat1);
             return dat1;
           } else {
             dat1.pop();
             render_dat1()
+            console.log(dat1)
             return dat1;
           }
         }
-
+        console.log(dat1)
         var dat2 = [];
-        function myfunction2() {
-          var checkBox = document.getElementById("myCheckBox2");
-          var text = document.getElementById("text");
-          if (checkBox.checked == true) {
-            dat2.push(...data);
-            render_dat2()
-            return dat2;
-          } else {
-            dat2.pop();
-            render_dat2()
-            return dat2;
-          }
-        }
-
         var dat3 = [];
-        function myfunction3() {
-          var checkBox = document.getElementById("myCheckBox3");
-          var text = document.getElementById("text");
-          if (checkBox.checked == true) {
-            dat3.push(...data);
-            render_dat3()
-            return dat3;
-          } else {
-            dat3.pop();
-            render_dat3()
-            return dat3;
-          }
-        }
-        
         var dat4 = [];
-        function myfunction4() {
-          var checkBox = document.getElementById("myCheckBox4");
-          var text = document.getElementById("text");
-          if (checkBox.checked == true) {
-            dat4.push(...data);
-            render_dat4()
-            return dat4;
-          } else {
-            dat4.pop();
-            render_dat4()
-            return dat4;
-          }
-        }
-
       </script>
 
 
@@ -530,97 +526,47 @@
           .remove()
       }
 
-      function render_dat2() {
+      for (var i = 0; i < dat2.length; i++) {
+        var d2 = dat2[i];
+        var coordinates2 = getPathCoordinates(d2);
 
-      let d2, coordinates2;
-      if (dat2.length > 0) {
-        d2 = dat2[0];
-        coordinates2 = [getPathCoordinates(d2)];
-      }
-      else {
-        coordinates2 = []
-      }
-
-      let u = svg.selectAll('.d2').data(coordinates2)
-
-      u.enter().append("path")
-        .attr('class', 'd2')
-        .attr("d", line)
-        //.transition()
-        //.duration(1000)
-        .attr("stroke-width", 3)
-        .attr("stroke", "blue")
-        .attr("fill", "blue")
-        .attr("stroke-opacity", 1)
-        .attr("opacity", 0.5)
-
-      u.exit()
-        //.transition()
-        //.duration(1000)
-        .remove()
+        svg.append("path")
+          .datum(coordinates2)
+          .attr("d", line)
+          .attr("stroke-width", 3)
+          .attr("stroke", "blue")
+          .attr("fill", "blue")
+          .attr("stroke-opacity", 1)
+          .attr("opacity", 0.5)
       }
 
-      function render_dat3() {
+      for (var i = 0; i < dat3.length; i++) {
+        var d3 = dat3[i];
+        var coordinates3 = getPathCoordinates(d3);
 
-      let d3, coordinates3;
-      if (dat3.length > 0) {
-        d3 = dat3[0];
-        coordinates3 = [getPathCoordinates(d3)];
-      }
-      else {
-        coordinates3 = []
-      }
-
-      let u = svg.selectAll('.d3').data(coordinates3)
-
-      u.enter().append("path")
-        .attr('class', 'd3')
-        .attr("d", line)
-        //.transition()
-        //.duration(1000)
-        .attr("stroke-width", 3)
-        .attr("stroke", "red")
-        .attr("fill", "red")
-        .attr("stroke-opacity", 1)
-        .attr("opacity", 0.5)
-
-      u.exit()
-        //.transition()
-        //.duration(1000)
-        .remove()
+        svg.append("path")
+          .datum(coordinates3)
+          .attr("d", line)
+          .attr("stroke-width", 3)
+          .attr("stroke", "red")
+          .attr("fill", "red")
+          .attr("stroke-opacity", 1)
+          .attr("opacity", 0.5)
       }
 
-      function render_dat4() {
+      for (var i = 0; i < dat4.length; i++) {
+        var d4 = dat4[i];
+        var coordinates4 = getPathCoordinates(d4);
 
-      let d4, coordinates4;
-      if (dat4.length > 0) {
-        d4 = dat4[0];
-        coordinates4 = [getPathCoordinates(d4)];
+        svg.append("path")
+          .datum(coordinates4)
+          .attr("d", line)
+          .attr("stroke-width", 3)
+          .attr("stroke", "red")
+          .attr("fill", "red")
+          .attr("stroke-opacity", 1)
+          .attr("opacity", 0.5)
       }
-      else {
-        coordinates4 = []
-      }
-
-      let u = svg.selectAll('.d4').data(coordinates4)
-
-      u.enter().append("path")
-        .attr('class', 'd4')
-        .attr("d", line)
-        //.transition()
-        //.duration(1000)
-        .attr("stroke-width", 3)
-        .attr("stroke", "pink")
-        .attr("fill", "pink")
-        .attr("stroke-opacity", 1)
-        .attr("opacity", 0.5)
-
-      u.exit()
-        //.transition()
-        //.duration(1000)
-        .remove()
-      }
-
-
 
       svg.append("circle").attr("cx", 540).attr("cy", 500).attr("r", 6).style("fill", "yellow")
       svg.append("circle").attr("cx", 540).attr("cy", 520).attr("r", 6).style("fill", "green")
