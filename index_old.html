@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html ng-app="RadarChart">
+
+<head>
+  <meta charset="utf-8">
+  <title>MUSIC FEATURES VISUALIZATION </title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" />
+</head>
+
+<style>
+  body {
+    font-family: "Open Sans", sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    padding-top: 10px;
+    padding-bottom: 100px;
+  }
+
+  html {
+    overflow-y: scroll;
+  }
+
+  h1 {
+    color: rgb(180, 70, 70);
+    font-weight: 800;
+    font-size: 1.7em;
+  }
+
+  h2 {
+    color: steelblue;
+    font-size: 1.3em;
+    padding-bottom: 10px;
+  }
+
+  h3 {
+    color: gray;
+    font-size: 1.2em;
+    padding-bottom: 10px;
+  }
+
+  footer a,
+  footer a:hover,
+  footer a:visited {
+    color: #D2A000;
+  }
+
+  .text-small {
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  footer {
+    color: white;
+    padding-top: 5px;
+    border-top: 1px solid gray;
+    font-size: 12px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    background: black;
+    text-align: center;
+  }
+
+  pre {
+    height: 200px;
+    font-size: 9px;
+    overflow-y: scroll;
+  }
+
+  .form-control-inline {
+    display: inline;
+    width: 40px;
+    margin-right: 5px;
+  }
+
+  .configuration {
+    font-size: 0.8em;
+    width: 250px;
+    border: 1px solid #ddd;
+    padding-left: 20px;
+    margin-bottom: 20px;
+  }
+
+  .checkbox {
+    margin-left: 20px;
+  }
+
+  .slider {
+    -webkit-appearance: none;
+    width: 90%;
+    height: 10px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+
+  .slider:hover {
+    opacity: 1;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #1f4921;
+    cursor: pointer;
+  }
+
+  .slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #4CAF50;
+    cursor: pointer;
+  }
+</style>
+
+<body>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+ 
+  <!-- header -->
+  <header class="page-header">
+    <h1>MUSIC FEATURES VISUALIZATION</h1>
+  </header>
+
+  <!-- main content -->
+  <div class="main container">
+    <!-- visualization -->
+    <div class="visualization col-xs-7">
+      <svg width="100%" ; height="600px"></svg>
+    </div>
+
+    <!-- configuration -->
+     <div class="configuration col-xs-5">
+      <form id="dat">
+        <h3>Choose The Area You Want To Investigate In</h3>
+        <input type="radio" id="Year" name="option" value="Year" onclick="div_OnOff()">Year<br> </input>
+        <input type="radio" id="Genre" name="option" value="Genre" onclick="div_OnOff()">Genre<br> </input>
+        <input type="radio" id="Artist" name="option" value="Artist" onclick="div_OnOff()">Artist<br> </input>
+      </form>
+
+ 
+
+      <div id="year">
+        <br>
+        <form id="slideyear">
+          <input type="range" min="1921" max="2020" value="1921" class="slider" id="myRange">
+          <p>Year: <span id="demo"></span></p>
+        </form>
+        <br>
+      </div>
+
+      <div id="genre">
+        <br>
+        <form id="search1">
+          <input id="genre_search_box" type="text" name="search1" value="Insert Genre">
+          <button onclick="find_genre_in_clust();">Submit</button>
+        </form>
+        <br>
+      </div>
+ 
+      <div id="artist">
+        <br>
+        <form id="search2">
+          <input id="artist_search_box" type="text" name="search2" value="Insert Artist's Name">
+          <button onclick="find_artist_in_clust();">Submit</button>
+        </form>
+        <br>
+      </div>
+
+      <br>
+      If you click the append checkbox, you can attach the graphs and compare those
+      <br>
+      <div id="append">
+        <input type="checkbox" name="myCheckBox" id="myCheckBox" onclick="myfunction1()">
+        <label for="myCheckBox">append 1</label>
+        <p id="text" style="display:none"></p> <br>
+        <input type="checkbox" name="myCheckBox2" id="myCheckBox2" onclick="myfunction2()">
+        <label for="myCheckBox2">append 2</label> <br>
+        <input type="checkbox" name="myCheckBox3" id="myCheckBox3" onclick="myfunction3()">
+        <label for="myCheckBox3">append 3</label> <br>
+        <input type="checkbox" name="myCheckBox4" id="myCheckBox4" onclick="myfunction4()">
+        <label for="myCheckBox4">append 4</label> <br>
+      </div>
+
+    </div>
+
+    <footer>
+      <p><a href="https://github.com/hkang1091/Assignment4" target="_blank"> MUSIC FEATURES VISUALIZATION </a> by Vizzard(Desmond Fung, Hangyu Kang, Param Gandhi, Sreeranjani Didugu)
+      </p>
+    </footer>
+    <script src="app.js"></script>
+
+
+</body>
+
+</html>

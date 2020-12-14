@@ -117,8 +117,6 @@ function plotInitial() {
     point2.energy = Data[6].energy
     point2.liveness = Data[6].liveness
     point2.tempo = Data[6].tempo
-    //console.log(point)
-    //features.forEach(f => point[f] = Math.random());
     data.push(point);
     data2.push(point2);
 
